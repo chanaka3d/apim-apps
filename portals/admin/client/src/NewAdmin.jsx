@@ -94,17 +94,15 @@ export default function NewAdmin() {
             .then((messages) => setMessages(messages));
     }
 
-     const locale = languageWithoutRegionCode || language;
-     if (!userResolved) {
-         return <Progress message='Resolving user ...' />;
-     }
+    const locale = languageWithoutRegionCode || language;
+    if (!userResolved) {
+        return <Progress message='Resolving user ...' />;
+    }
     return (
         <div>
             <IntlProvider locale={locale} messages={messages}>
                 <AdminRootErrorBoundary appName='Admin Application'>
-      
-                                            <ProtectedApp user={user} />
-                                       
+                    <ProtectedApp user={user} />
                 </AdminRootErrorBoundary>
             </IntlProvider>
         </div>

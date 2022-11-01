@@ -11,7 +11,7 @@ module.exports = (env) => {
   // }, {});
   const devConfig = {
     entry: {
-      main: path.resolve(__dirname, './client/src/index.jsx'),
+      main: path.resolve(__dirname, './client/source/index.tsx'),
     },
     module: {
       rules: [
@@ -23,7 +23,7 @@ module.exports = (env) => {
             options: {
               presets: ['@babel/preset-react', '@babel/preset-env']
             }
-          }
+          },
         },
         {
           test: /\.(ts|tsx)$/,
@@ -33,27 +33,48 @@ module.exports = (env) => {
         {
           test: /\.css$/,
           use: ['style-loader', 'css-loader']
+        },
+        {
+          test: /\.(woff|woff2|ttf|eot|png|jpg|svg|gif)$/i,
+          use: ['file-loader']
         }
       ]
     },
     output: {
+      filename: '[name].bundle.js',
       path: path.resolve(__dirname, './client/public/build'),
-      filename: 'bundle.js',
-      publicPath: '/'
+    },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+      },
     },
     plugins: [
       new HtmlWebpackPlugin({
         title: 'WSO2 API Manager',
         // Load a custom template (lodash by default)
-        template: './client/src/pages/index.html',
+        template: './client/pages/index.html',
         publicPath: '/build',
+        templateParameters: { env: env.production ? 'production': 'development'},
       })
     ],
     resolve: {
       alias: {
+        assets: path.resolve(__dirname, 'client/source/assets'),
+        auth: path.resolve(__dirname, 'client/source/auth'),
+        components: path.resolve(__dirname, 'client/source/components'),
+        context: path.resolve(__dirname, 'client/source/context'),
+        layout: path.resolve(__dirname, 'client/source/layout'),
+        'menu-items': path.resolve(__dirname, 'client/source/menu-items'),
+        pages: path.resolve(__dirname, 'client/source/pages'),
+        routes: path.resolve(__dirname, 'client/source/routes'),
+        themes: path.resolve(__dirname, 'client/source/themes'),
+        types: path.resolve(__dirname, 'client/source/types'),
+        config: path.resolve(__dirname, 'client/source/config.ts'),
+
+        // For the old UIs
         client: path.resolve(__dirname, 'client/src'),
-        AppData: path.resolve(__dirname, 'client/src/data/'),
-        AppComponents: path.resolve(__dirname, 'client/src/components/'),
+        AppData: path.resolve(__dirname, 'client/source/data/'),
       },
       extensions: ['.tsx', '.ts', '.js', '.jsx'],
     },
